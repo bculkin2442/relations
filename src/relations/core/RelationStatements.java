@@ -19,6 +19,7 @@ public class RelationStatements {
 	public static Map<String, Object> newEnv() {
 		return new HashMap<>();
 	}
+	
 	/**
 	 * Conditionally executes one of two relations.
 	 * 
@@ -31,9 +32,9 @@ public class RelationStatements {
 			, Map<String, Object> env) {
 		if(condition.process(env, new TrueRelation())) {
 			return ifTrue.process(env, new TrueRelation());
-		} else {
-			return ifFalse.process(env, new TrueRelation());
 		}
+
+		return ifFalse.process(env, new TrueRelation());
 	}
 
 	/**
@@ -49,9 +50,9 @@ public class RelationStatements {
 	public static boolean doIf(IRelation condition, IRelation ifTrue, Map<String, Object> env) {
 		if(condition.process(env, new TrueRelation())) {
 			return ifTrue.process(env, new TrueRelation());
-		} else {
-			return false;
 		}
+		
+		return false;
 	}
 
 	/**
@@ -64,13 +65,10 @@ public class RelationStatements {
 	 */
 	public static boolean doFor(IRelation domain, IRelation exp, IRelation stop,
 			Map<String, Object> env) {
-		return domain.process(env, new IRelation() {
+		return domain.process(env, (env1, chain) -> {
+			exp.process(env1, new TrueRelation());
 			
-			@Override
-			public boolean process(Map<String, Object> env, IRelation chain) {
-				exp.process(env, new TrueRelation());
-				return stop.process(env, new TrueRelation());
-			}
+			return stop.process(env1, new TrueRelation());
 		});
 	}
 

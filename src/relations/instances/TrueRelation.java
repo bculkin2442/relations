@@ -11,12 +11,8 @@ import relations.core.IRelation;
  */
 public final class TrueRelation implements IRelation {
 
-	/**
-	 * Ignores both arguments and returns true
-	 */
 	@Override
 	public boolean process(Map<String, Object> env, IRelation chain) {
 		return true;
 	}
-
 }
